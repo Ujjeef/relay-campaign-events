@@ -1,19 +1,32 @@
 # AI usage disclosure
 
 ## Tools used
-- An AI coding assistant (opencode, `big-pickle` model) for scaffolding,
-  implementation, tests, and documentation review.
+- opencode, used as an AI coding assistant.
 - Go's standard toolchain (`gofmt`, `go vet`, `go test`, `go test -race`) to
-  verify everything the assistant produced.
+  verify the result.
 
-## What I used it for
+## My contribution
+- I defined the problem in my own words, the assumptions, and the priorities for
+  the time available (see `NOTES.md`).
+- I made the design decisions the code implements: `event_id` as the
+  idempotency key, first-wins handling of conflicting duplicates, per-item
+  reporting for invalid events, returning both `opened` and `unique_opens`,
+  in-memory storage behind a repository interface, and a mutex around the
+  check-and-insert.
+- I reviewed the implementation file by file (entry point, model, repository,
+  service, handlers) and confirmed how duplicate prevention, validation,
+  concurrency, pagination, and the stats calculation work.
+- I confirmed the verification results: `go vet`, `go test`, `go test -race`,
+  the seed-file smoke test, and the debugging output matching
+  `expected_output.txt`.
+- I chose the submission and repository settings.
+
+## What I used the AI assistant for
 - Drafting the package layout (`models`, `repository`, `services`, `handlers`)
   and the HTTP wiring.
-- Turning the design decisions I had already made into Go code: per-item
-  `[]json.RawMessage` decoding, `event_id`-keyed idempotent insert behind a
-  `sync.RWMutex`, and both `opened` and `unique_opens` in stats.
+- Turning the design decisions above into Go code.
 - Generating first drafts of the tests (duplicates, mixed batches, concurrency,
-  pagination) and the written sections, which I then reviewed and adjusted.
+  pagination) and the written sections, which I reviewed.
 - Explaining the four bugs in the supplied debugging program and checking the
   minimal fixes.
 
